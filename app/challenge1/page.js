@@ -66,7 +66,7 @@ const challenge1 = () => {
 
       } catch (err) {
         setLoading(false);
-        setError(err.message);
+        setError(err);
         console.log(error);
       }
     }

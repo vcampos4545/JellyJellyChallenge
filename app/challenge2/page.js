@@ -73,12 +73,6 @@ const Products = () => {
       }
     return (
         <div>
-        <Head>
-            <title>Products Page</title>
-            <meta name="description" content="Products page with filters" />
-            <link rel="icon" href="/favicon.ico" />
-        </Head>
-
         <main className="container mx-auto p-4">
             <h1 className="text-2xl font-bold mb-4">Search a Shopify Site</h1>
 
