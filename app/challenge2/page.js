@@ -4,7 +4,7 @@ import { useState } from 'react';
 import Head from 'next/head';
 
 //TODO: Create seaparate file of shopify links
-const shopifySites = ["http://helmboots.com", "http://shop.dia.com", "https://rothys.com/"]
+const shopifySites = ["https://helmboots.com", "https://shop.dia.com", "https://rothys.com/"]
 
 const Products = () => {
     const [currentPage, setCurrentPage] = useState(1);
@@ -61,10 +61,6 @@ const Products = () => {
           console.log(err);
         }
       }
-
-
-      
-
     return (
         <div>
         <Head>
@@ -136,16 +132,6 @@ const Products = () => {
                 ? filteredProducts.length
                 : indexOfLastItem
             } of ${filteredProducts.length} results`}</p>
-
-            {/* Pagination Buttons */}
-            <div className="mt-4 flex justify-between">
-            <button onClick={handlePrevPage} disabled={currentPage === 1}>
-                Previous Page
-            </button>
-            <button onClick={handleNextPage} disabled={currentPage === totalPages}>
-                Next Page
-            </button>
-            </div>
 
             {/* Product Tiles */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">

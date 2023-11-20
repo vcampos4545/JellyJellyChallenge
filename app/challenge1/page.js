@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from 'react'
-import openai from '../utils/openai'
 import Jelly from "../components/Jelly"
 
 const challenge1 = () => {
@@ -33,6 +32,7 @@ const challenge1 = () => {
         var linkSplit = jellyData.jellyLink.split('/');
         var id = linkSplit[linkSplit.length - 1];
         
+        // Get jelly 
         const jellyResp = await fetch("/api/jelly", {
           method: "POST",
           headers : {
@@ -40,18 +40,20 @@ const challenge1 = () => {
           },
           body: JSON.stringify({"id": id}),
         });
-        const data = await jellyResp.json();
-        var title = data.title;
-        var summary = data.summary;
+        const jelly = await jellyResp.json();
+        var title = jelly.title;
+        var summary = jelly.summary;
   
-        // Calle dalle3 with jelly title
-        const dalleResp = await openai.images.generate({
-            model: "dall-e-3",
-            prompt: title,
-            n: 1,
-            size: "1024x1024",
+        // Get generated image
+        const dalleResp = await fetch("/api/dalle3", {
+          method: "POST",
+          headers : {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({"prompt": title}),
         });
-        const imageUrl = dalleResp.data[0].url;
+        const dalle = await dalleResp.json();
+        var imageUrl = dalle.imageUrl;
   
         setLoading(false);
         setJellyData({
