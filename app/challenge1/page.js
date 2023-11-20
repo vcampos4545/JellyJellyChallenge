@@ -39,8 +39,6 @@ const challenge1 = () => {
         const jelly = await jellyResp.json();
         var title = jelly.title;
         var summary = jelly.summary;
-        console.log(title)
-        console.log(summary)
   
         // Get generated image
         const dalleResp = await fetch("/api/dalle3", {
@@ -52,6 +50,7 @@ const challenge1 = () => {
         });
         console.log(dalleResp)
         const dalle = await dalleResp.json();
+        console.log(dalle)
         var imageUrl = dalle.imageUrl;
   
         setLoading(false);
