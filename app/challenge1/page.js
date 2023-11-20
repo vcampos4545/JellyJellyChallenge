@@ -7,6 +7,7 @@ const challenge1 = () => {
     const [jellyData, setJellyData] = useState({});
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+    const [generateImageWith, setGenerateImageWith] = useState('title');
   
     const handleChange = (e) => {
       setJellyData({
@@ -50,7 +51,7 @@ const challenge1 = () => {
           headers : {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({"prompt": title}),
+          body: JSON.stringify({"prompt": generateImageWith === "title" ? title : summary}),
         });
         const dalle = await dalleResp.json();
         var imageUrl = dalle.imageUrl;
@@ -70,22 +71,41 @@ const challenge1 = () => {
       }
     }
     return (
-      <div className="flex items-center">
-        <label className="mr-2 text-lg" htmlFor="jellyLink">
-          Enter a jelly link:
-        </label>
-        <input
-          type="text"
-          id="jellyLink"
-          className="border border-gray-300 px-2 py-1 rounded focus:outline-none focus:border-blue-500"
-          placeholder="https://example.com/jelly"
-          value={jellyData.jellyLink}
-          onChange={handleChange}
-        />
+      <div className="container mx-auto p-4 text-center flex-center">
+        {/* Search Input */}
+        <div className="mb-4">
+          <label htmlFor="jellyLinkInput" className="block text-lg font-semibold mb-2">
+            Enter a Jelly Link:
+          </label>
+          <input
+            type="text"
+            id="jellyLink"
+            value={jellyData.jellyLink}
+            onChange={handleChange}
+            className="border p-2 w-full"
+          />
+        </div>
+
+        {/* Generate Image Dropdown */}
+        <div className="mb-4">
+          <label htmlFor="generateImageDropdown" className="block text-lg font-semibold mb-2">
+            Generate Image with:
+          </label>
+          <select
+            id="generateImageDropdown"
+            value={generateImageWith}
+            onChange={(e) => setGenerateImageWith(e.target.value)}
+            className="border p-2 w-full"
+          >
+            <option value="title">Title</option>
+            <option value="summary">Summary</option>
+          </select>
+        </div>
+
+        {/* Generate Image Button */}
         <button
-          className="ml-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700 focus:outline-none focus:shadow-outline-blue"
           onClick={handleSubmit}
-          disabled={loading}
+          className="bg-blue-500 text-white px-4 py-2 rounded"
         >
           {loading ? "Loading..." : "Generate Image"}
         </button>

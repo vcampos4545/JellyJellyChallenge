@@ -2,13 +2,14 @@
 
 import { useState } from 'react';
 import Head from 'next/head';
+import ProductTile from '../components/ProductTile';
 
 //TODO: Create seaparate file of shopify links
-const shopifySites = ["https://helmboots.com", "https://shop.dia.com", "https://rothys.com/"]
+const shopifySites = ["https://helmboots.com", "https://shop.dia.com", "https://rothys.com"]
 
 const Products = () => {
     const [currentPage, setCurrentPage] = useState(1);
-    const [itemsPerPage, setItemsPerPage] = useState(25);
+    const [itemsPerPage, setItemsPerPage] = useState(10);
     const [shopifyLink, setShopifyLink] = useState(shopifySites[0]);
     const [searchTerm, setSearchTerm] = useState('');
     const [products, setProducts] = useState([]);
@@ -47,10 +48,19 @@ const Products = () => {
             // Getting products from the site that meet search term
             // TODO: Get all products from site dynamically
             var page = 1;
-            const res = await fetch(shopifyLink+'/products.json?limit=250&page='+page);
-            const data = await res.json();
+            while (true) {
+                const res = await fetch(shopifyLink+'/products.json?limit=250&page='+page);
+                const data = await res.json();
+                var products = data['products']
+                setProducts(prevArray => [...prevArray, ...products]);
 
-            setProducts([...data["products"]]);  
+                if (products.length === 250) {
+                    page += 1;
+                } else {
+                    break;
+                }
+            }
+              
             setLoading(false);
             setError(null);
     
@@ -120,10 +130,10 @@ const Products = () => {
             onChange={(e) => setItemsPerPage(Number(e.target.value))}
             className="border p-1"
             >
+            <option value={10}>10</option>
             <option value={25}>25</option>
             <option value={50}>50</option>
             <option value={100}>100</option>
-            <option value={250}>250</option>
             </select>
 
             {/* Displaying search results count */}
@@ -136,26 +146,7 @@ const Products = () => {
             {/* Product Tiles */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {currentItems.map((product) => (
-                <div key={product.id} className="border p-4 rounded overflow-hidden shadow-lg m-4">
-                {/* Product Image */}
-                <img
-                    src={product.images[0].src}
-                    alt={product.title}
-                    className="w-full h-32 object-cover mb-2"
-                />
-
-                {/* Product Title */}
-                <h3 className="text-lg font-semibold">{product.title}</h3>
-
-                {/* Product Price */}
-                <p className="text-gray-600">{`$${product.variants[0].price}`}</p>
-
-                {/* Product Description */}
-                <p className="mt-2 text-sm text-gray-500" 
-                dangerouslySetInnerHTML={{__html: product.body_html}}></p>
-
-                {/* Add more product details as needed */}
-                </div>
+                <ProductTile product={product} />
             ))}
             </div>
 
