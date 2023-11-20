@@ -5,16 +5,11 @@ import Jelly from "../components/Jelly"
 
 const challenge1 = () => {
     const [jellyData, setJellyData] = useState({});
+    const [jellyLink, setJellyLink] = useState('');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [generateImageWith, setGenerateImageWith] = useState('title');
-  
-    const handleChange = (e) => {
-      setJellyData({
-        ...jellyData,
-        [e.target.id]: e.target.value,
-      });
-    };
+
     const handleSubmit = async (e) => {
       e.preventDefault(); // prevents page reload
       try {
@@ -23,14 +18,14 @@ const challenge1 = () => {
         setJellyData({});
   
         //Check valid jelly link
-        if (!jellyData.jellyLink.includes("www.jellyjelly.com/ti/r")) {
+        if (!jellyLink.includes("www.jellyjelly.com/ti/r")) {
           setError("Invalid jelly link");
           setLoading(false);
           return;
         }
   
         // Get jelly id from link
-        var linkSplit = jellyData.jellyLink.split('/');
+        var linkSplit = jellyLink.split('/');
         var id = linkSplit[linkSplit.length - 1];
         
         // Get jelly 
@@ -44,6 +39,8 @@ const challenge1 = () => {
         const jelly = await jellyResp.json();
         var title = jelly.title;
         var summary = jelly.summary;
+        console.log(title)
+        console.log(summary)
   
         // Get generated image
         const dalleResp = await fetch("/api/dalle3", {
@@ -53,6 +50,7 @@ const challenge1 = () => {
           },
           body: JSON.stringify({"prompt": generateImageWith === "title" ? title : summary}),
         });
+        console.log(dalleResp)
         const dalle = await dalleResp.json();
         var imageUrl = dalle.imageUrl;
   
@@ -81,7 +79,7 @@ const challenge1 = () => {
             type="text"
             id="jellyLink"
             value={jellyData.jellyLink}
-            onChange={handleChange}
+            onChange={(e) => setJellyLink(e.target.value)}
             className="border p-2 w-full"
           />
         </div>
