@@ -13,9 +13,6 @@ const Home = () => {
               you can generate album cover images using OpenAI's Dall-e-3 image generation model
               for a Jelly conversation and browse products listed on any shopify site.  
             </p>
-            <button className="btn-primary">
-              Get Started
-            </button>
           </div>
         </div>
     </section>
